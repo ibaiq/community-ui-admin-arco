@@ -1,0 +1,284 @@
+body {
+  --el-color-primary: rgb(var(--primary-6));
+  --el-color-primary-light-3: rgb(var(--primary-7));
+
+  .el-card {
+    background: var(--color-bg-2) !important;
+
+    .el-card__header {
+      border-bottom-color: var(--color-fill-3);
+      color: var(--color-text-2);
+    }
+  }
+
+  .el-checkbox {
+    --el-checkbox-font-weight: 400;
+    --el-checkbox-text-color: var(--color-text-1);
+    --el-checkbox-checked-text-color: var(--color-text-1);
+    --el-checkbox-bg-color: var(--color-bg-2);
+    --el-checkbox-input-border: 2px solid var(--color-fill-3);
+    --el-checkbox-input-border-color-hover: rgb(var(--primary-6)) !important;
+    --el-checkbox-checked-bg-color: rgb(var(--primary-6)) !important;
+    --el-checkbox-checked-input-border-color: transparent;
+
+    .el-checkbox__inner::after {
+      border: 1.5px solid var(--el-checkbox-checked-icon-color);
+      border-left: 0;
+      border-top: 0;
+      left: 3.5px;
+      top: 0.5px;
+      width: 2px;
+      height: 6px;
+    }
+
+    .el-checkbox__input.is-indeterminate .el-checkbox__inner::before {
+      border: 2px solid var(--el-checkbox-checked-icon-color);
+      border-left: 0;
+      border-top: 0;
+      top: 3px;
+    }
+  }
+
+  .el-table {
+    border-radius: var(--border-radius-medium) var(--border-radius-medium) 0 0;
+    --el-table-header-bg-color: var(--color-neutral-2);
+    --el-table-border-color: var(--color-neutral-3);
+    --el-table-text-color: rgb(var(--gray-10));
+    --el-table-tr-bg-color: var(--color-bg-2);
+    --el-table-header-text-color: rgb(var(--gray-10));
+    --el-table-row-hover-bg-color: var(--color-fill-1);
+
+    thead {
+      th {
+        font-weight: 500 !important;
+      }
+    }
+
+    tr.el-table__row--striped td.el-table__cell {
+      background-color: var(--color-fill-1) !important;
+    }
+
+    .el-table__cell {
+      padding: 0;
+
+      .cell {
+        padding: 9px 16px !important;
+      }
+    }
+
+    .custom-cell {
+      .cell {
+        display: flex !important;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+body[arco-theme='dark'] {
+  .el-tag {
+    background-color: var(--color-primary-light-1);
+    border-color: var(--color-primary-light-4);
+    color: rgb(var(--primary-6));
+  }
+
+  .el-table {
+    .el-table__body {
+      tr.el-table__row--striped {
+        td.el-table__cell {
+          background: var(--color-bg-4) !important;
+        }
+      }
+    }
+  }
+
+  .el-pagination {
+    --el-pagination-bg-color: var(--color-bg-2);
+    --el-pagination-button-disabled-bg-color: var(--color-bg-2);
+    --el-pagination-button-disabled-color: var(--color-text-4);
+    --el-pagination-button-color: var(--color-text-2);
+    color: var(--color-text-3);
+
+    .el-select {
+      .el-input {
+        --el-input-text-color: var(--color-text-3);
+        --el-input-icon-color: var(--color-text-3);
+        --el-input-bg-color: var(--color-bg-4);
+      }
+    }
+
+    .el-pagination__total {
+      color: var(--color-text-2);
+    }
+  }
+
+  .el-message-box {
+    background-color: var(--color-bg-3);
+    border-color: var(--color-border-2);
+
+    .el-message-box__title {
+      color: var(--color-text-1);
+    }
+
+    .el-message-box__close {
+      color: var(--color-text-1);
+    }
+
+    .el-button--default {
+      background-color: var(--color-fill-5);
+      border-color: var(--color-border-2);
+      --el-button-text-color: var(--color-text-3);
+      --el-button-hover-text-color: var(--color-text-2);
+    }
+
+    .el-button--default:hover {
+      background-color: var(--color-fill-1);
+    }
+
+    .el-button--primary {
+      background-color: rgb(var(--primary-6));
+      border-color: transparent;
+      color: white;
+    }
+
+    .el-button--primary:hover {
+      background-color: rgb(var(--primary-5));
+      border-color: transparent;
+      color: white;
+    }
+
+    .el-message-box__message {
+      color: var(--color-text-1);
+    }
+  }
+
+  .el-dialog {
+    background-color: var(--color-bg-2);
+
+    .el-dialog__header {
+      .el-dialog__title {
+        color: var(--color-text-1);
+      }
+
+      .el-dialog__close {
+        color: var(--color-text-1);
+      }
+    }
+
+    .el-dialog__body {
+      .el-form {
+        .el-form-item__label {
+          color: var(--color-text-1);
+        }
+
+        .el-radio:not(.is-checked) {
+          --el-radio-input-bg-color: var(--color-bg-5);
+          color: var(--color-text-1);
+
+          .el-radio__inner {
+            border-color: var(--color-border-2);
+          }
+        }
+
+        .el-input {
+          --el-input-bg-color: var(--color-bg-4);
+          --el-input-border-color: var(--color-border-2);
+          --el-input-hover-border-color: var(--color-border-4);
+          --el-select-input-focus-border-color: var(--primary-1);
+          --el-input-text-color: var(--color-text-2);
+        }
+      }
+    }
+
+    .el-dialog__footer {
+      .el-button--default {
+        background-color: var(--color-fill-5);
+        border-color: var(--color-border-2);
+        --el-button-text-color: var(--color-text-3);
+        --el-button-hover-text-color: var(--color-text-2);
+      }
+
+      .el-button--default:hover {
+        background-color: var(--color-fill-1);
+      }
+
+      .el-button--primary {
+        background-color: rgb(var(--primary-6));
+        border-color: transparent;
+        color: white;
+      }
+
+      .el-button--primary:hover {
+        background-color: rgb(var(--primary-5));
+        border-color: transparent;
+        color: white;
+      }
+    }
+  }
+
+  .el-select__popper.el-popper[role='tooltip'] {
+    background-color: var(--color-bg-3);
+    border-color: var(--color-border-2);
+
+    .el-select-dropdown {
+      .hover {
+        background-color: var(--color-fill-3);
+      }
+
+      .el-select-dropdown__item {
+        color: var(--color-text-2);
+      }
+    }
+
+    .el-popper__arrow::before {
+      background-color: var(--color-bg-3);
+      border-color: var(--color-border-2);
+    }
+  }
+
+  .el-dropdown__popper.el-popper[role='tooltip'] {
+    background-color: var(--color-bg-3);
+    border-color: var(--color-border-2);
+
+    .el-popper__arrow::before {
+      background-color: var(--color-bg-3);
+      border-color: var(--color-border-2);
+    }
+
+    .el-dropdown-menu {
+      background: none;
+
+      .el-dropdown-menu__item {
+        color: var(--color-text-2);
+
+        &:not(.is-disabled):focus {
+          background-color: var(--color-bg-5);
+        }
+      }
+    }
+  }
+
+  .el-tree {
+    background-color: var(--color-bg-3);
+
+    --el-tree-node-hover-bg-color: var(--color-fill-2);
+    --el-tree-text-color: var(--color-text-1);
+    --el-tree-expand-icon-color: var(--color-text-1);
+  }
+
+  .el-checkbox {
+    --el-checkbox-checked-text-color: var(--color-text-1);
+    --el-checkbox-bg-color: var(--color-bg-2);
+    --el-checkbox-input-border: 2px solid var(--color-fill-3);
+    --el-checkbox-input-border-color-hover: rgb(var(--primary-6));
+    --el-checkbox-checked-bg-color: rgb(var(--primary-6));
+  }
+
+  .el-notification {
+    background-color: var(--color-bg-5);
+    border-color: var(--color-border-2);
+    --el-notification-title-color: var(--color-text-1);
+    --el-notification-content-color: var(--color-text-2);
+    --el-notification-close-color: var(--color-text-1);
+  }
+}

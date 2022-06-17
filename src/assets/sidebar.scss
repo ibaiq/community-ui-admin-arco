@@ -1,0 +1,112 @@
+@import 'variables';
+
+#app {
+  .app-wrapper {
+    .main-container {
+      min-height: 100%;
+      -webkit-transition: margin-left 0.28s;
+      transition: margin-left 0.28s;
+      margin-left: $sideBarWidth;
+      position: relative;
+    }
+
+    .sidebar-container {
+      -webkit-transition: width 0.28s;
+      transition: width 0.28s;
+      width: $sideBarWidth !important;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 910;
+      overflow: hidden;
+      box-shadow: none;
+    }
+  }
+
+  .header-fixed {
+    .main-container {
+      .header {
+        width: calc(100% - #{$sideBarWidth});
+      }
+    }
+  }
+
+  .sidebarShadow {
+    .sidebar-container {
+      box-shadow: 0 2px 5px 0 rgb(0 0 0 / 8%);
+    }
+  }
+
+  .hideSidebar:is(.header-fixed) {
+    .main-container {
+      .header {
+        width: calc(100% - #{$sideBarWidthClose + px});
+      }
+    }
+  }
+
+  .hideSidebar {
+    .sidebar-container {
+      width: $sideBarWidthClose + px !important;
+    }
+
+    .arco-menu-collapsed {
+      .arco-menu-item {
+        justify-content: center;
+        padding: initial;
+        height: 40px;
+
+        .arco-menu-icon {
+          margin-right: 0;
+        }
+      }
+
+      .arco-menu-has-icon {
+        > *:not(.arco-menu-icon) {
+          display: none;
+        }
+      }
+
+      .arco-menu-pop-header {
+        justify-content: center;
+        padding: initial;
+        height: 40px;
+
+        .arco-menu-icon {
+          margin-right: 0;
+        }
+      }
+    }
+
+    .main-container {
+      margin-left: $sideBarWidthClose + px;
+    }
+  }
+
+  .mobile {
+    .main-container {
+      margin-left: 0;
+    }
+
+    .main-container {
+      .header {
+        width: 100% !important;
+      }
+    }
+
+    .sidebar-container {
+      transition: transform 0.28s;
+      width: $sideBarWidth !important;
+    }
+
+    &.hideSidebar {
+      .sidebar-container {
+        pointer-events: none;
+        transition-duration: 0.3s;
+        transform: translate3d(-$sideBarWidth, 0, 0);
+      }
+    }
+  }
+}

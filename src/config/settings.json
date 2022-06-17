@@ -1,0 +1,9 @@
+{
+  "pageShadow": false,
+  "headerStripe": false,
+  "sidebarMenuShadow": true,
+  "fixedHeader": true,
+  "colorWeek": false,
+  "tabs": true,
+  "breadcrumb": false
+}
