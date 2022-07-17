@@ -4,11 +4,15 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, watchEffect } from 'vue';
 import { useStore } from 'vuex';
 import Settings from './components/settings/Index.vue';
+import { useWindowSize } from '@vueuse/core';
 
 const store = useStore();
+
+const { width } = useWindowSize();
+const WIDTH = 992;
 
 const setThemeColor = () => {
   if (store.getters.colorMode === 'auto') {
@@ -43,6 +47,14 @@ onMounted(() => {
     document.body.style.filter = 'invert(80%)';
   } else {
     document.body.style.filter = 'none';
+  }
+});
+
+watchEffect(() => {
+  if (width.value - 1 < WIDTH) {
+    store.dispatch('app/toggleDevice', 'mobile');
+  } else {
+    store.dispatch('app/toggleDevice', 'desktop');
   }
 });
 </script>

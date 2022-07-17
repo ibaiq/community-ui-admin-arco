@@ -22,14 +22,7 @@
 
 <script setup>
 import { useStore } from 'vuex';
-import {
-  computed,
-  getCurrentInstance,
-  onMounted,
-  watch,
-  watchEffect,
-} from 'vue';
-import { useWindowSize } from '@vueuse/core';
+import { computed, getCurrentInstance, onMounted, watch } from 'vue';
 import { AppMain, Header, Sidebar } from '@/layout/components';
 import { useRoute } from 'vue-router';
 
@@ -49,9 +42,6 @@ const classObj = computed(() => ({
   'pageShadow': settings.value.pageShadow,
   'headerStripe': settings.value.headerStripe,
 }));
-
-const { width } = useWindowSize();
-const WIDTH = 992;
 
 watch(route, () => {
   if (route.name) {
@@ -80,14 +70,6 @@ onMounted(() => {
       duration: 3000,
     });
     sessionStorage.setItem('first', JSON.stringify(true));
-  }
-});
-
-watchEffect(() => {
-  if (width.value - 1 < WIDTH) {
-    store.dispatch('app/toggleDevice', 'mobile');
-  } else {
-    store.dispatch('app/toggleDevice', 'desktop');
   }
 });
 
