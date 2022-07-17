@@ -22,7 +22,7 @@ export const routes = [
     path: '/login',
     name: 'Login',
     hidden: true,
-    component: () => import('@/views/login/Index.vue'),
+    component: () => import('@/views/login/Index_two.vue'),
     meta: { title: '请先登录' },
   },
 ];
