@@ -130,6 +130,17 @@
   }
 }
 
+.arco-modal-simple {
+  padding: 20px !important;
+  .arco-modal-title {
+    justify-content: start !important;
+  }
+
+  .arco-modal-footer {
+    text-align: end !important;
+  }
+}
+
 .custom-select-icon {
   .arco-popover-content {
     height: 240px;
