@@ -33,12 +33,20 @@
             />
           </a-form-item>
         </a-col>
-        <a-col>
-          <a-form-item label="菜单类型" field="type" validate-trigger="blur">
-            <a-radio-group :model-value="modal.menu.type">
+        <a-col :span="12">
+          <a-form-item label="菜单属性" field="type" validate-trigger="blur">
+            <a-radio-group v-model:model-value="modal.menu.type">
               <a-radio :value="0">目录</a-radio>
               <a-radio :value="1">菜单</a-radio>
               <a-radio :value="2">按钮</a-radio>
+            </a-radio-group>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="菜单类型" validate-trigger="blur">
+            <a-radio-group v-model:model-value="modal.menu.system">
+              <a-radio :value="true">系统菜单</a-radio>
+              <a-radio :value="false">普通菜单</a-radio>
             </a-radio-group>
           </a-form-item>
         </a-col>
@@ -208,15 +216,17 @@ const submitForm = () => {
   proxy.$refs.formRef.validate((valid) => {
     if (!valid) {
       if (props.modal.menu.id) {
-        modifyMenu(props.modal.menu);
-        emits('refresh');
-        props.modal.open = false;
-        proxy.$message.success('修改成功');
+        modifyMenu(props.modal.menu).then(() => {
+          emits('refresh');
+          props.modal.open = false;
+          proxy.$message.success('修改成功');
+        });
       } else {
-        addMenu(props.modal.menu);
-        emits('refresh');
-        props.modal.open = false;
-        proxy.$message.success('添加成功');
+        addMenu(props.modal.menu).then(() => {
+          emits('refresh');
+          props.modal.open = false;
+          proxy.$message.success('添加成功');
+        });
       }
     }
   });

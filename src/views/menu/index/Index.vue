@@ -4,7 +4,7 @@
       <a-row :gutter="[15, 15]">
         <!--搜索部分-->
         <a-col data-search :class="{ hiddenSearch: !showSearch }">
-          <a-form :model="params" layout="inline" size="small">
+          <a-form ref="searchForm" :model="params" layout="inline" size="small">
             <a-form-item label="菜单名称" field="title">
               <a-input
                 v-model="params.title"
@@ -21,9 +21,9 @@
             </a-form-item>
             <a-form-item label="菜单属性" field="type">
               <a-select v-model="params.type" allow-clear placeholder="请选择">
-                <a-option label="目录" value="0">目录</a-option>
-                <a-option label="菜单" value="1">菜单</a-option>
-                <a-option label="按钮" value="2">按钮</a-option>
+                <a-option label="目录" :value="0">目录</a-option>
+                <a-option label="菜单" :value="1">菜单</a-option>
+                <a-option label="按钮" :value="2">按钮</a-option>
               </a-select>
             </a-form-item>
             <a-form-item hide-label>
@@ -88,7 +88,7 @@
             <template #option>
               <a-table-column
                 resizable
-                :width="100"
+                :width="130"
                 title="操作"
                 align="center"
                 key="option"
@@ -102,6 +102,14 @@
                       icon="Edit"
                       @click="handleUpdate(record)"
                       >修改
+                    </el-button>
+                    <el-button
+                      type="danger"
+                      link
+                      size="small"
+                      icon="Edit"
+                      @click="handleDelete(record)"
+                      >删除
                     </el-button>
                   </a-space>
                 </template>
@@ -118,13 +126,14 @@
 
 <script setup name="Menu-index">
 import RightToolbar from '@/components/rightToolbar/Index.vue';
-import { getCurrentInstance, reactive, toRefs } from 'vue';
+import { getCurrentInstance, reactive, toRefs, h, resolveComponent } from 'vue';
 import { getMenu, menuList } from '@/api/menu.js';
 import AddAndModify from '@/views/menu/index/components/modal/AddAndModify.vue';
 import Table from './components/table/Table.vue';
 import ArcoVueIcon from '@arco-design/web-vue/es/icon/index.js';
 import { useStore } from 'vuex';
 import { alibabaIcon } from '@/api/app.js';
+import { delUser } from '@/api/user.js';
 
 const { proxy } = getCurrentInstance();
 const store = useStore();
@@ -136,8 +145,9 @@ const data = reactive({
   params: {
     // TODO 以下是每个页面需要的参数，自行添加
     title: undefined,
-    url: undefined,
+    path: undefined,
     type: undefined,
+    system: undefined,
   },
   columns: [
     {
@@ -238,9 +248,18 @@ const getList = () => {
 
 getList();
 
-const handleSearch = () => {};
+const handleSearch = () => {
+  getList();
+};
 
-const handleResetSearch = () => {};
+const handleResetSearch = () => {
+  data.params = {
+    title: '',
+    path: '',
+    type: undefined,
+  };
+  handleSearch();
+};
 
 const handleExpansion = () => {
   data.table.expansionAll = proxy.$refs.tableRef.toggleAllExpansion();
@@ -277,6 +296,45 @@ const handleUpdate = async (record) => {
   } catch (e) {
     console.log(e);
   }
+};
+
+const handleDelete = async (record) => {
+  const getType = (type) => {
+    return type === 0 ? '目录' : type === 1 ? '菜单' : '按钮';
+  };
+  proxy.$modal.warning({
+    title: '系统提示',
+    content: () =>
+      h(
+        'p',
+        {
+          style: {
+            wordBreak: 'break-all',
+            margin: 0,
+          },
+        },
+        [
+          h('span', '确认要删除「'),
+          h('b', `${record.title}`),
+          h('span', `」「${getType(record.type)}」吗？`),
+        ]
+      ),
+    width: 460,
+    onOk: () => {
+      delUser(userId).then(() => {
+        proxy.$message.success('删除成功');
+        if (data.list.length - userId.length === 0) {
+          let copy_pageNum = data.params.pageNum;
+          if (copy_pageNum - 1 > 0) {
+            data.params.pageNum -= 1;
+          }
+        }
+        getList();
+        store.dispatch('user/setHaveDelete', true);
+      });
+    },
+    onCancel: () => {},
+  });
 };
 
 const iconNameList = async () => {
@@ -341,4 +399,18 @@ const { list, loading, showSearch, params, columns, modal, table } =
   toRefs(data);
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.card {
+  .arco-row {
+    .arco-form-item {
+      :deep(.arco-select-view-single) {
+        width: 6rem;
+      }
+
+      :deep(.arco-input-wrapper) {
+        width: 10rem;
+      }
+    }
+  }
+}
+</style>

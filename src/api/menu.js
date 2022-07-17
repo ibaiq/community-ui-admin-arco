@@ -15,6 +15,13 @@ export function menuList(params) {
 }
 
 /**
+ * 获取删除的菜单列表
+ */
+export function menuDelList(params) {
+  return request.get('/manage/menu/delList', { params });
+}
+
+/**
  * 获取菜单完整信息
  */
 export function getMenu(menuId) {

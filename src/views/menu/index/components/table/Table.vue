@@ -11,6 +11,7 @@
       :row-key="rowKey"
       :default-expand-all-rows="isExpandAll"
       ref="tableRef"
+      :pagination="false"
       v-loading="loading"
       v-if="refreshTable"
     >
