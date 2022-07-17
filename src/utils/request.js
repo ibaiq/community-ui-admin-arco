@@ -34,14 +34,23 @@ service.interceptors.response.use(
     let { message, config } = error;
     let isMessage = config.headers.notShowMessage;
     if (!isMessage && axios.isCancel(error)) {
-      Message.warning('请勿重复请求');
+      Message.warning({
+        id: 'isCancel',
+        content: '请勿重复请求',
+      });
     }
     if (!isMessage && message.includes('timeout')) {
       // error.response.data.msg = "接口请求连接超时";
-      Message.warning('接口请求连接超时');
+      Message.warning({
+        id: 'timeout',
+        content: '接口请求连接超时',
+      });
     } else if (!isMessage && message === 'Network Error') {
       // error.response.data.msg = "后端接口连接异常";
-      Message.error('后端接口连接异常');
+      Message.error({
+        id: 'Network Error',
+        content: '后端接口连接异常',
+      });
     }
     if (error.response !== undefined) {
       if (error.response.status === 401) {
@@ -56,18 +65,30 @@ service.interceptors.response.use(
           .then()
           .catch();
         if (!isMessage) {
-          Message.error(error.response.data.msg);
+          Message.error({
+            id: '401',
+            content: error.response.data.msg,
+          });
         }
       } else if (
         (!isMessage && error.response.status === 500) ||
         error.response.status === 400 ||
         error.response.status === 404
       ) {
-        Message.error(error.response.data.msg || '服务器开小差了~');
+        Message.error({
+          id: '400',
+          content: error.response.data.msg || '服务器开小差了~',
+        });
       } else if (!isMessage && error.response.status === 403) {
-        Message.warning(error.response.data.msg);
+        Message.warning({
+          id: '403',
+          content: error.response.data.msg,
+        });
       } else if (!isMessage && error.response.status === 405) {
-        Message.warning(error.response.data.msg);
+        Message.warning({
+          id: '405',
+          content: error.response.data.msg,
+        });
       }
       return Promise.reject(error.response.data);
     } else {
