@@ -487,13 +487,8 @@ const handleDelete = (row) => {
   } else {
     userId = data.selected.item.map((item) => item.id);
   }
-  proxy.$modal.open({
-    titleAlign: 'start',
-    title: () =>
-      h('span', [
-        h(resolveComponent('icon-exclamation-circle-fill')),
-        h('span', '系统提示'),
-      ]),
+  proxy.$modal.warning({
+    title: '系统提示',
     content: () =>
       h(
         'p',
