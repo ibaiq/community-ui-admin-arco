@@ -1,18 +1,9 @@
 <template>
   <div v-if="!item.hidden">
-    <template
-      v-if="
-        hasOneShowingChild(item.children, item) &&
-        (!onlyOneChild.children || !onlyOneChild.noShowingChildren) &&
-        !item.alwaysShow
-      "
-    >
-      <app-link
-        v-if="onlyOneChild.meta"
-        :to="resolvePath(onlyOneChild.path, onlyOneChild.query)"
-      >
+    <template v-if="item.meta.type === 1">
+      <app-link :to="resolvePath(onlyOneChild.path, onlyOneChild.query)">
         <a-menu-item :key="resolvePath(onlyOneChild.path, undefined)">
-          <template #icon>
+          <template v-if="item.meta.icon" #icon>
             <icon-font
               v-if="item.meta.icon.includes('#')"
               :type="item.meta.icon.replace('#', '')"
