@@ -9,12 +9,10 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import store from '@/store/index.js';
 import router from '@/router/index.js';
 import * as ElIconModules from '@element-plus/icons-vue';
-import ArcoVue from '@arco-design/web-vue';
+// import i18n from "@/i18n/i18n.js";
+import ArcoVue, { Icon } from '@arco-design/web-vue';
 import ArcoVueIcon from '@arco-design/web-vue/es/icon/index.js';
 import '@arco-design/web-vue/dist/arco.css';
-// import i18n from "@/i18n/i18n.js";
-import { Icon } from '@arco-design/web-vue';
-import { getConfValue } from '@/api/config.js';
 
 const app = createApp(App);
 
