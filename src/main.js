@@ -18,15 +18,8 @@ import { getConfValue } from '@/api/config.js';
 
 const app = createApp(App);
 
-try {
-  const path = await getConfValue('sys.icon.url');
-  store.state.app.iconPath = path.data;
-} catch (e) {
-  store.state.app.iconPath = import.meta.env.VITE_APP_ICON_URL;
-}
-
 const IconFont = Icon.addFromIconFontCn({
-  src: 'https:' + store.state.app.iconPath,
+  src: 'https:' + import.meta.env.VITE_APP_ICON_URL,
 });
 
 app.component('icon-font', IconFont);
