@@ -96,6 +96,22 @@ h1 {
 .main {
   flex: 1 0 33.3333%;
 
+  h1:before {
+    content: '';
+    position: absolute;
+    top: 35%;
+    left: 30px;
+    width: 280px;
+    height: 100px;
+    background: linear-gradient(
+      to right,
+      var(--primary-color),
+      #c471ed,
+      #f64f59
+    );
+    filter: blur(70px);
+  }
+
   .arco-form {
     display: flex;
     flex-direction: column;
@@ -119,6 +135,11 @@ h1 {
           padding: 0;
           border: 0;
           outline: 0;
+          color: var(--dark-color);
+        }
+
+        :deep(.arco-input-suffix) {
+          color: var(--dark-color);
         }
 
         :deep(.arco-input::placeholder) {
@@ -208,6 +229,7 @@ h1 {
           box-shadow: 0 10px 20px -10px var(--light-text-color);
           transition: all 0.3s ease-out;
           font-size: 30px;
+          color: var(--dark-color) !important;
 
           &:hover {
             color: var(--white-color);

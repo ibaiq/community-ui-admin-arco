@@ -1,8 +1,8 @@
 <template>
-  <div class="site">
+  <div class="site" arco-theme="light">
     <div class="container">
       <div class="login">
-        <div class="hero">
+        <div v-if="store.getters.device === 'desktop'" class="hero">
           <h1
             >欢 迎<br />
             登录Lazy管理系统</h1
@@ -10,6 +10,11 @@
           <p>如果你没有账户,<br />可以在这里<a href="javascript:">注册</a>.</p>
         </div>
         <div class="main">
+          <h1
+            v-if="store.getters.device === 'mobile'"
+            style="text-align: center; margin-bottom: 30px"
+            >登 录</h1
+          >
           <a-form :model="data.formDate.user" :rules="rules" ref="form">
             <a-form-item field="username" validate-trigger="blur" hide-label>
               <a-input
@@ -200,6 +205,7 @@ const handleNotAvailable = () => {
     content: '暂未开放',
   });
 };
+
 </script>
 
 <style scoped lang="scss">

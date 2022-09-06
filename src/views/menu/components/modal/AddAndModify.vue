@@ -3,7 +3,7 @@
     title-align="start"
     :title="modal.title"
     v-model:visible="modal.open"
-    :width="700"
+    :width="750"
   >
     <a-form
       :model="modal.menu"
@@ -34,23 +34,6 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="菜单属性" field="type" validate-trigger="blur">
-            <a-radio-group v-model:model-value="modal.menu.type">
-              <a-radio :value="0">目录</a-radio>
-              <a-radio :value="1">菜单</a-radio>
-              <a-radio :value="2">按钮</a-radio>
-            </a-radio-group>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label="菜单类型" validate-trigger="blur">
-            <a-radio-group v-model:model-value="modal.menu.system">
-              <a-radio :value="true">系统菜单</a-radio>
-              <a-radio :value="false">普通菜单</a-radio>
-            </a-radio-group>
-          </a-form-item>
-        </a-col>
-        <a-col>
           <a-form-item label="图标" field="icon" validate-trigger="blur">
             <a-popover
               position="bottom"
@@ -61,6 +44,7 @@
                 placeholder="请选择图标"
                 readonly
                 v-model="modal.menu.icon"
+                allow-clear
               >
                 <template v-if="modal.menu.icon" #prefix>
                   <icon-font
@@ -96,6 +80,18 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
+          <a-form-item label="菜单属性" field="type" validate-trigger="blur">
+            <a-radio-group
+              v-model:model-value="modal.menu.type"
+              @change="handleMenuTypeChange"
+            >
+              <a-radio :value="0">目录</a-radio>
+              <a-radio :value="1">菜单</a-radio>
+              <a-radio :value="2">按钮</a-radio>
+            </a-radio-group>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
           <a-form-item label="菜单名称" field="title" validate-trigger="blur">
             <a-input
               v-model:model-value="modal.menu.title"
@@ -105,7 +101,39 @@
         </a-col>
         <a-col :span="12">
           <a-form-item label="显示排序" field="sortNum" validate-trigger="blur">
-            <a-input-number v-model:model-value="modal.menu.sortNum" :min="0" />
+            <a-input-number
+              v-model:model-value="modal.menu.sortNum"
+              :min="0"
+              model-event="input"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="菜单类型" validate-trigger="blur">
+            <a-radio-group v-model:model-value="modal.menu.system">
+              <a-radio :value="true">系统菜单</a-radio>
+              <a-radio :value="false">普通菜单</a-radio>
+            </a-radio-group>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="路由名称" field="name" validate-trigger="blur">
+            <a-input
+              v-model:model-value="modal.menu.name"
+              placeholder="请输入路由名称"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item
+            label="路由组件"
+            field="component"
+            validate-trigger="blur"
+          >
+            <a-input
+              v-model:model-value="modal.menu.component"
+              placeholder="请输入路由组件路径"
+            />
           </a-form-item>
         </a-col>
         <a-col :span="12">
@@ -212,15 +240,44 @@ const handleSelectIcon = (icon) => {
   props.modal.menu.icon = icon;
 };
 
+const handleMenuTypeChange = (value) => {
+  if (value !== 2) {
+    props.modal.rules[`icon`] = [{ required: true, message: '请选择图标' }];
+    props.modal.rules[`name`] = [
+      { required: true, message: '路由名称不能为空' },
+    ];
+  } else {
+    delete props.modal.rules[`icon`];
+    delete props.modal.rules[`name`];
+  }
+  if (value === 1) {
+    props.modal.rules[`component`] = [
+      { required: true, message: '路由组件不能为空' },
+    ];
+  } else {
+    delete props.modal.rules[`component`];
+  }
+};
+
 const submitForm = () => {
   proxy.$refs.formRef.validate((valid) => {
     if (!valid) {
       if (props.modal.menu.id) {
-        modifyMenu(props.modal.menu).then(() => {
-          emits('refresh');
-          props.modal.open = false;
-          proxy.$message.success('修改成功');
-        });
+        if (props.modal.menu.parentId !== props.modal.menu.id) {
+          modifyMenu(props.modal.menu).then(() => {
+            emits('refresh');
+            props.modal.open = false;
+            proxy.$message.success({
+              content: '修改成功',
+              id: 'menuUpdateSuccess',
+            });
+          });
+        } else {
+          proxy.$message.warning({
+            content: '本菜单不能与上级目录一致',
+            id: 'menuUpdateError',
+          });
+        }
       } else {
         addMenu(props.modal.menu).then(() => {
           emits('refresh');

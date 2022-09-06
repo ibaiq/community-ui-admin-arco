@@ -30,7 +30,7 @@
 
 <script setup>
 import Column from './Column.vue';
-import { getCurrentInstance } from 'vue';
+import { getCurrentInstance, watch } from 'vue';
 
 const props = defineProps({
   stripe: {
@@ -65,6 +65,15 @@ const props = defineProps({
 const emits = defineEmits(['status', 'selection', 'rowContextmenu']);
 
 const { proxy } = getCurrentInstance();
+
+watch(
+  () => props.data,
+  (value) => {
+    if (value.length <= 0) {
+      handleSelectionChange([]);
+    }
+  }
+);
 
 const handleStatusChange = (status, record) => {
   emits('status', record);

@@ -32,7 +32,13 @@ import { computed } from 'vue';
 
 const store = useStore();
 
-const emits = defineEmits(['update:pageNum', 'update:pageSize', 'callback']);
+const emits = defineEmits([
+  'update:pageNum',
+  'update:pageSize',
+  'callback',
+  'update:page',
+  'update:limit',
+]);
 defineProps({
   total: {
     type: Number,

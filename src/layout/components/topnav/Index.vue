@@ -15,6 +15,7 @@ import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { isHttp } from '@/utils/validate.js';
+import { resolve } from 'path-browserify';
 
 const store = useStore();
 const route = useRoute();
@@ -49,7 +50,8 @@ const childrenMenus = computed(() => {
       if (router.children[item].parentPath === undefined) {
         if (!isHttp(router.children[item].path)) {
           router.children[item].path =
-            router.path + '/' + router.children[item].path;
+            // router.path + '/' + router.children[item].path;
+            resolve(router.path, router.children[item].path);
         }
         router.children[item].parentPath = router.path;
       }
@@ -65,7 +67,7 @@ const activeMenu = computed(() => {
   let activePath = defaultRouter.value;
   if (current !== undefined && current.lastIndexOf('/') > 0) {
     const tmpPath = current.substring(activePath.length, current.length);
-    activePath = '/' + tmpPath.substring(0, tmpPath.indexOf('/'));
+    activePath = resolve('/', tmpPath.substring(0, tmpPath.indexOf('/')));
   } else if (defaultRouter.value === current || '' === current) {
     if (!data.isFrist) {
       data.isFrist = true;

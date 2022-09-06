@@ -8,6 +8,8 @@ const state = {
   menus: [],
   routes: [],
   topNavRoutes: [],
+  haveRevert: false,
+  haveDelete: false,
 };
 
 const mutations = {
@@ -19,6 +21,12 @@ const mutations = {
   },
   SET_TOP_NAV_ROUTES: (state, topNavRoutes) => {
     state.topNavRoutes = topNavRoutes;
+  },
+  set_have_revert: (state, haveRevert) => {
+    state.haveRevert = haveRevert;
+  },
+  set_have_delete: (state, haveDelete) => {
+    state.haveDelete = haveDelete;
   },
 };
 
@@ -45,6 +53,12 @@ const actions = {
           reject(err);
         });
     });
+  },
+  async setHaveRevert({ commit }, haveRevert) {
+    await commit('set_have_revert', haveRevert);
+  },
+  async setHaveDelete({ commit }, haveDelete) {
+    await commit('set_have_delete', haveDelete);
   },
 };
 

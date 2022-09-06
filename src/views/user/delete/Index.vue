@@ -102,7 +102,8 @@
               >
                 <a-space>
                   <el-button
-                    type="text"
+                    type="primary"
+                    link
                     size="small"
                     @click="handleRevert(row)"
                   >
@@ -247,7 +248,7 @@ const data = reactive({
 /**
  * 监听到有删除用户自动刷新数据
  */
-store.watch(getters.haveDelete, (value) => {
+store.watch(getters.userHaveDelete, (value) => {
   if (value) {
     getList();
     store.dispatch('user/setHaveDelete', false);
@@ -362,7 +363,6 @@ const handleRevert = (row) => {
           }
         }
         getList();
-        proxy.$refs.tableRef.selectAll(false);
         store.dispatch('user/setHaveRevert', true);
       });
     },

@@ -88,7 +88,7 @@
             <template #option>
               <a-table-column
                 resizable
-                :width="130"
+                :width="100"
                 title="操作"
                 align="center"
                 key="option"
@@ -99,17 +99,12 @@
                       type="primary"
                       link
                       size="small"
-                      icon="Edit"
-                      @click="handleUpdate(record)"
-                      >修改
-                    </el-button>
-                    <el-button
-                      type="danger"
-                      link
-                      size="small"
-                      icon="Edit"
-                      @click="handleDelete(record)"
-                      >删除
+                      @click="handleRevert(record)"
+                    >
+                      <template #icon>
+                        <icon-undo />
+                      </template>
+                      还原
                     </el-button>
                   </a-space>
                 </template>
@@ -119,22 +114,17 @@
         </a-col>
       </a-row>
     </div>
-    <!--弹窗部分-->
-    <add-and-modify :modal="modal.amModel" @refresh="getList" />
   </div>
 </template>
 
-<script setup name="Menu-index">
-import RightToolbar from '@/components/rightToolbar/Index.vue';
-import { getCurrentInstance, h, reactive, toRefs } from 'vue';
-import { getMenu, menuList } from '@/api/menu.js';
-import AddAndModify from '@/views/menu/components/modal/AddAndModify.vue';
-import Table from '../components/table/Table.vue';
-import ArcoVueIcon from '@arco-design/web-vue/es/icon/index.js';
+<script setup name="Menu-delete">
 import { useStore } from 'vuex';
-import { alibabaIcon } from '@/api/app.js';
-import { delUser } from '@/api/user.js';
+import { getCurrentInstance, h, reactive, toRefs } from 'vue';
+import { menuDelList } from '@/api/menu.js';
+import RightToolbar from '@/components/rightToolbar/Index.vue';
+import Table from './../components/table/Table.vue';
 import getters from '@/store/getters.js';
+import { delUser } from '@/api/user.js';
 
 const { proxy } = getCurrentInstance();
 const store = useStore();
@@ -155,12 +145,6 @@ const data = reactive({
       label: '菜单名称',
       key: 'title',
       width: 150,
-      tooltip: true,
-    },
-    {
-      label: '路由名称',
-      key: 'name',
-      width: 120,
       tooltip: true,
     },
     {
@@ -223,37 +207,24 @@ const data = reactive({
     },
   ],
   // TODO 其他数据自行添加
-  modal: {
-    amModel: {
-      open: false,
-      title: '',
-      treeList: [],
-      menu: {},
-      active: undefined,
-      icon: [],
-      rules: {
-        title: [{ required: true, message: '角色名称不能为空' }],
-      },
-    },
-  },
   table: {
     expansionAll: true,
   },
 });
 
 /**
- * 监听到有菜单恢复自动刷新数据
+ * 监听到有菜单删除自动刷新数据
  */
-store.watch(getters.menuHaveRevert, (value) => {
+store.watch(getters.menuHaveDelete, (value) => {
   if (value) {
     getList();
-    store.dispatch('user/setHaveRevert', false);
+    store.dispatch('user/setHaveDelete', false);
   }
 });
 
 const getList = () => {
   data.loading = true;
-  menuList(data.params)
+  menuDelList(data.params)
     .then((res) => {
       data.list = res.data;
       data.loading = false;
@@ -265,88 +236,7 @@ const getList = () => {
 
 getList();
 
-const handleSearch = () => {
-  getList();
-};
-
-const handleResetSearch = () => {
-  data.params = {
-    title: '',
-    path: '',
-    type: undefined,
-  };
-  handleSearch();
-};
-
-const handleExpansion = () => {
-  data.table.expansionAll = proxy.$refs.tableRef.toggleAllExpansion();
-};
-
-const handleAdd = async () => {
-  resetModalForm();
-  data.modal.amModel.title = '添加菜单';
-  await iconNameList();
-  menuList().then((res) => {
-    data.modal.amModel.treeList = res.data;
-    data.modal.amModel.treeList = treeAddAttr(data.modal.amModel.treeList);
-    treeSelect(data.modal.amModel.treeList);
-    data.modal.amModel.active = 0;
-    data.modal.amModel.menu.type = 1;
-    data.modal.amModel.open = true;
-    if (data.modal.amModel.menu.type !== 2) {
-      data.modal.amModel.rules[`icon`] = [
-        { required: true, message: '请选择图标' },
-      ];
-      data.modal.amModel.rules[`name`] = [
-        { required: true, message: '路由名称不能为空' },
-      ];
-    }
-    if (data.modal.amModel.menu.type === 1) {
-      data.modal.amModel.rules[`component`] = [
-        { required: true, message: '路由组件不能为空' },
-      ];
-    }
-  });
-};
-
-const handleUpdate = async (record) => {
-  resetModalForm();
-  data.modal.amModel.title = '修改菜单信息';
-  try {
-    let menu = await getMenu(record.id);
-    data.modal.amModel.menu = menu.data;
-    await iconNameList();
-    menuList().then((res) => {
-      data.modal.amModel.treeList = res.data;
-      data.modal.amModel.treeList = treeAddAttr(data.modal.amModel.treeList);
-      treeSelect(data.modal.amModel.treeList);
-      data.modal.amModel.active = data.modal.amModel.menu.parentId;
-      data.modal.amModel.open = true;
-      if (data.modal.amModel.menu.type !== 2) {
-        data.modal.amModel.rules[`icon`] = [
-          { required: true, message: '请选择图标' },
-        ];
-        data.modal.amModel.rules[`name`] = [
-          { required: true, message: '路由名称不能为空' },
-        ];
-      } else {
-        delete data.modal.amModel.rules[`icon`];
-        delete data.modal.amModel.rules[`name`];
-      }
-      if (data.modal.amModel.menu.type === 1) {
-        data.modal.amModel.rules[`component`] = [
-          { required: true, message: '路由组件不能为空' },
-        ];
-      } else {
-        delete data.modal.amModel.rules[`component`];
-      }
-    });
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-const handleDelete = async (record) => {
+const handleRevert = (record) => {
   const getType = (type) => {
     return type === 0 ? '目录' : type === 1 ? '菜单' : '按钮';
   };
@@ -362,7 +252,7 @@ const handleDelete = async (record) => {
           },
         },
         [
-          h('span', '确认要删除「'),
+          h('span', '确认要还原删除的「'),
           h('b', `${record.title}`),
           h('span', `」「${getType(record.type)}」吗？`),
         ]
@@ -370,7 +260,7 @@ const handleDelete = async (record) => {
     width: 460,
     onOk: () => {
       delUser(userId).then(() => {
-        proxy.$message.success('删除成功');
+        proxy.$message.success('还原成功');
         if (data.list.length - userId.length === 0) {
           let copy_pageNum = data.params.pageNum;
           if (copy_pageNum - 1 > 0) {
@@ -378,69 +268,11 @@ const handleDelete = async (record) => {
           }
         }
         getList();
-        store.dispatch('menu/setHaveDelete', true);
+        store.dispatch('menu/setHaveRevert', true);
       });
     },
     onCancel: () => {},
   });
-};
-
-const iconNameList = async () => {
-  let array = [];
-  for (const argumentsKey in ArcoVueIcon) {
-    let toLowerCase = argumentsKey.replace(/([A-Z])/g, '-$1').toLowerCase();
-    array.push(toLowerCase.replace(/^-/, ''));
-  }
-  array.splice(array.length - 1, 1);
-  let alibabaIconRes = await alibabaIcon();
-  let iconPrefix = alibabaIconRes.css_prefix_text;
-  let aliIconArr = alibabaIconRes.glyphs;
-  aliIconArr = aliIconArr.map((i) => {
-    return `#${iconPrefix}${i.font_class}`;
-  });
-  array.push.apply(array, aliIconArr);
-  data.modal.amModel.icon = array;
-};
-
-const treeSelect = (list) => {
-  let menu = { id: 0, title: '主目录', children: [] };
-  menu.children = list;
-  data.modal.amModel.treeList = [menu];
-};
-
-const resetModalForm = () => {
-  data.modal.amModel.menu = {
-    children: [],
-    component: '',
-    created: '',
-    deleted: 0,
-    icon: null,
-    id: undefined,
-    isFrame: false,
-    name: null,
-    parentId: 0,
-    path: '',
-    perms: null,
-    sortNum: 0,
-    status: true,
-    system: false,
-    title: null,
-    type: 1,
-    visible: true,
-  };
-};
-
-const treeAddAttr = (list) => {
-  if (list !== undefined && list !== null && list.length > 0) {
-    list.forEach((item) => {
-      item.disabled = item.type !== 0;
-      if (item.children) {
-        treeAddAttr(item.children);
-      }
-    });
-    return list;
-  }
-  return [];
 };
 
 const { list, loading, showSearch, params, columns, modal, table } =

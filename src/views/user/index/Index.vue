@@ -106,7 +106,7 @@
                 align="center"
                 label="操作"
                 key="option"
-                :min-width="180"
+                :min-width="190"
                 v-slot="{ row }"
               >
                 <a-space>
@@ -315,7 +315,7 @@ const data = reactive({
 /**
  * 监听到有恢复用户自动刷新数据
  */
-store.watch(getters.haveRevert, (value) => {
+store.watch(getters.userHaveRevert, (value) => {
   if (value) {
     getList();
     store.dispatch('user/setHaveRevert', false);

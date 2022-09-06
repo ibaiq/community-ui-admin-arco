@@ -9,11 +9,13 @@
       :show-header="data.length > 0"
       :data="data"
       :row-key="rowKey"
+      hide-expand-button-on-empty
       :default-expand-all-rows="isExpandAll"
       ref="tableRef"
       :pagination="false"
       v-loading="loading"
       v-if="refreshTable"
+      @row-click="handleRowClick"
     >
       <template #columns>
         <Column :columns="columns" @status="handleStatusChange" />
@@ -71,6 +73,9 @@ const isExpandAll = ref(props.expansionAll);
 
 const handleStatusChange = (status, record) => {
   emits('status', status, record);
+};
+
+const handleRowClick = (record, event) => {
 };
 
 const toggleAllExpansion = () => {

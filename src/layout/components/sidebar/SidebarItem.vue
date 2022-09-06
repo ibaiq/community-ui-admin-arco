@@ -1,8 +1,14 @@
 <template>
   <div v-if="!item.hidden">
-    <template v-if="item.meta.type === 1">
+    <template
+      v-if="
+        hasOneShowingChild(item.children, item) &&
+        onlyOneChild.meta.type === 1 &&
+        !item.alwaysShow
+      "
+    >
       <app-link :to="resolvePath(onlyOneChild.path, onlyOneChild.query)">
-        <a-menu-item :key="resolvePath(onlyOneChild.path, undefined)">
+        <a-menu-item :key="resolvePath(onlyOneChild.path, onlyOneChild.query)">
           <template v-if="item.meta.icon" #icon>
             <icon-font
               v-if="item.meta.icon.includes('#')"
@@ -37,9 +43,9 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { isExternal } from '@/utils/validate.js';
-import { getNormalPath } from '@/utils/ibaiq.js';
 import AppLink from './Link.vue';
 import { useStore } from 'vuex';
+import { resolve } from 'path-browserify';
 
 const store = useStore();
 
@@ -99,11 +105,11 @@ const resolvePath = (routePath, routeQuery) => {
   if (routeQuery) {
     let query = JSON.parse(routeQuery);
     return {
-      path: getNormalPath(props.basePath + '/' + routePath),
+      path: resolve(props.basePath, routePath),
       query: query,
     };
   }
-  return getNormalPath(props.basePath + '/' + routePath);
+  return resolve(props.basePath, routePath);
 };
 </script>
 

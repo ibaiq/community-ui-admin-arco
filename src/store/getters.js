@@ -13,8 +13,10 @@ const getters = {
   settings: (state) => state.app.settings,
   showSettings: (state) => state.app.showSettings,
   cachedViews: (state) => state.cache.cachedViews,
-  haveRevert: (state) => state.user.haveRevert,
-  haveDelete: (state) => state.user.haveDelete,
+  userHaveRevert: (state) => state.user.haveRevert,
+  userHaveDelete: (state) => state.user.haveDelete,
+  menuHaveRevert: (state) => state.menu.haveRevert,
+  menuHaveDelete: (state) => state.menu.haveDelete,
   iconPath: (state) => state.app.iconPath,
 };
 
