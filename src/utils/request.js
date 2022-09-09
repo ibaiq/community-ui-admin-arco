@@ -91,29 +91,30 @@ service.interceptors.response.use(
         });
       }
       return Promise.reject(error.response.data);
-    } else {
-      let config = error.config;
-      if (!config) return Promise.reject(error);
-      const { __retryCount = 0, retryDelay = 300 } = config;
-      // 在请求对象上设置重试次数
-      config.__retryCount = __retryCount;
-      // 判断是否超过了重试次数
-      if (__retryCount >= 2) {
-        return Promise.reject(error);
-      }
-      // 增加重试次数
-      config.__retryCount++;
-      // 延时处理
-      const delay = new Promise((resolve) => {
-        setTimeout(() => {
-          resolve();
-        }, retryDelay);
-      });
-      // 重新发起请求
-      return delay.then(function () {
-        return service(config);
-      });
     }
+    // else {
+    //   let config = error.config;
+    //   if (!config) return Promise.reject(error);
+    //   const { __retryCount = 0, retryDelay = 300 } = config;
+    //   // 在请求对象上设置重试次数
+    //   config.__retryCount = __retryCount;
+    //   // 判断是否超过了重试次数
+    //   if (__retryCount >= 2) {
+    //     return Promise.reject(error);
+    //   }
+    //   // 增加重试次数
+    //   config.__retryCount++;
+    //   // 延时处理
+    //   const delay = new Promise((resolve) => {
+    //     setTimeout(() => {
+    //       resolve();
+    //     }, retryDelay);
+    //   });
+    //   // 重新发起请求
+    //   return delay.then(function () {
+    //     return service(config);
+    //   });
+    // }
   }
 );
 
