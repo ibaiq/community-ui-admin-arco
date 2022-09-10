@@ -182,6 +182,10 @@ h1 {
         &:hover {
           box-shadow: 0 10px 30px -10px var(--primary-color);
         }
+
+        &.arco-btn-loading {
+          box-shadow: 0 10px 30px -10px var(--primary-color);
+        }
       }
     }
   }
